@@ -22,7 +22,7 @@ This document is a brief description of the Smart Contracts. It covers the basic
 
 Other Smart Contracts that are part of xExchange, but are not part of this repository:
 
-- [Moax wrapping](https://github.com/multiversx/mx-sdk-rs/tree/master/contracts/core/wmoax-swap) used for swapping MOAX to an ESDT and reversed with an exchange rate of 1:1.
+- [Moax wrapping](https://github.com/dharitri/mx-sdk-rs/tree/master/contracts/core/wmoax-swap) used for swapping MOAX to an DCT and reversed with an exchange rate of 1:1.
 
 ## DEX Contracts
 
@@ -76,4 +76,4 @@ This smart contract allows users to interact with the DEX using Locked MEX as fu
 
 ### Locked MEX Factory Contract
 
-Locked MEX is a Meta ESDT. Since there can be only one address (per shard) that can hold the role of creating a Meta ESDT, this contract was created so the multiple other contracts that need to create Locked MEX can just request them from only one place.
+Locked MEX is a Meta DCT. Since there can be only one address (per shard) that can hold the role of creating a Meta DCT, this contract was created so the multiple other contracts that need to create Locked MEX can just request them from only one place.
