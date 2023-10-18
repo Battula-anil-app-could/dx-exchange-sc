@@ -1,0 +1,27 @@
+[package]
+name = "energy-update"
+version = "0.0.0"
+authors = ["Dharitri <contact@dharitri.com>"]
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+[dependencies.dharitri-sc]
+version = "=0.0.1"
+features = ["dct-token-payment-legacy-decode"]
+
+[dependencies.dharitri-sc-modules]
+version = "=0.0.1"
+
+[dependencies.farm]
+path = "../../dex/farm"
+
+[dependencies.weekly-rewards-splitting]
+path = "../common-modules/weekly-rewards-splitting"
+
+[dev-dependencies]
+num-bigint = "0.4.2"
+
+[dev-dependencies.dharitri-sc-scenario]
+version = "=0.0.1"
