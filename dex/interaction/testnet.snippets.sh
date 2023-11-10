@@ -7,10 +7,10 @@ CHAIN_ID="T"
 # PROXY="http://localhost:7950"
 # CHAIN_ID="local-testnet"
 
-DCT_ISSUE_ADDRESS="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
-ROUTE_ADDRESS="erd1qqqqqqqqqqqqqpgq9s7ft5fj72zyt8qn8yd24xcl8rxu9v4m0n4sjlh528"
-WMOAX_WRAP_ADDRESS="erd1qqqqqqqqqqqqqpgq4axqc749vuqr27snr8d8qgvlmz44chsr0n4sm4a72g"
-PAIR_ADDRESS="erd1qqqqqqqqqqqqqpgqr23zlc896w6qc2hw3evmmdmppw6jaucv0n4svx9zhn"
+DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
+ROUTE_ADDRESS="moa1qqqqqqqqqqqqqpgq9s7ft5fj72zyt8qn8yd24xcl8rxu9v4m0n4sl83mkh"
+WMOAX_WRAP_ADDRESS="moa1qqqqqqqqqqqqqpgq4axqc749vuqr27snr8d8qgvlmz44chsr0n4skdm3kc"
+PAIR_ADDRESS="moa1qqqqqqqqqqqqqpgqr23zlc896w6qc2hw3evmmdmppw6jaucv0n4sp7rdtr"
 DEFAULT_GAS_LIMIT=50000000
 
 ##### ENDPOINTS #####

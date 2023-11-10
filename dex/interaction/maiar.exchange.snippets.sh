@@ -3,8 +3,8 @@
 WALLET_PEM="~/Documents/shared_folder/dharitri_testnet_wallet.pem"
 PROXY="https://testnet-gateway.dharitri.com"
 CHAIN_ID="T"
-ROUTE_ADDRESS="erd1qqqqqqqqqqqqqpgqnqf6qpnd7y3m6wpkur9u8hg37rvhn5ae0n4se7lw39"
-DCT_ISSUE_ADDRESS="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+ROUTE_ADDRESS="moa1qqqqqqqqqqqqqpgqnqf6qpnd7y3m6wpkur9u8hg37rvhn5ae0n4s5xepd4"
+DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
 DEFAULT_GAS_LIMIT=50000000
 
 ##### ENDPOINTS #####

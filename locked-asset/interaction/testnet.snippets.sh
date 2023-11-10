@@ -5,9 +5,9 @@ PROXY="https://testnet-gateway.dharitri.com"
 CHAIN_ID="T"
 
 
-LOCKED_ASSET_FACTORY_ADDRESS="erd1qqqqqqqqqqqqqpgqhpu9gztn7tmznxc46q46uk6f23ttnern0n4sar7l79"
-PROXY_ADDRESS="erd1qqqqqqqqqqqqqpgqdhtgx8pvmjtzkdpykjl570dll33sasze0n4sy76g6e"
-DISTRIBUTION_ADDRESS="erd1qqqqqqqqqqqqqpgqc8relmv973g34dytgd55p3hmaaljvka30n4s6n64q6"
+LOCKED_ASSET_FACTORY_ADDRESS="moa1qqqqqqqqqqqqqpgqhpu9gztn7tmznxc46q46uk6f23ttnern0n4ssmcsz4"
+PROXY_ADDRESS="moa1qqqqqqqqqqqqqpgqdhtgx8pvmjtzkdpykjl570dll33sasze0n4sfxu8xf"
+DISTRIBUTION_ADDRESS="moa1qqqqqqqqqqqqqpgqc8relmv973g34dytgd55p3hmaaljvka30n4shtu6u2"
 DEFAULT_GAS_LIMIT=50000000
 
 
