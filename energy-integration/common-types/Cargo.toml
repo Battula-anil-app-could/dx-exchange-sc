@@ -7,5 +7,5 @@ edition = "2021"
 [lib]
 path = "src/lib.rs"
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]

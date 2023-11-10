@@ -10,8 +10,8 @@ WALLET_PEM=""
 PROXY="https://testnet-gateway.dharitri.com"
 CHAIN_ID="T"
 
-ZERO_ADDRESS="moa1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqhsx6tv"
-DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
+ZERO_ADDRESS="erd1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq6gq4hu"
+DCT_ISSUE_ADDRESS="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
 LOCKING_SC_ADDRESS=""
 PRICE_DISCOVERY_ADDRESS=""
 

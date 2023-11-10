@@ -34,8 +34,8 @@ path = "../../pausable"
 path = "../../permissions_module"
 
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]
 
 [dependencies.dharitri-sc-modules]
-version = "=0.0.1"
+version = "=0.1.6"

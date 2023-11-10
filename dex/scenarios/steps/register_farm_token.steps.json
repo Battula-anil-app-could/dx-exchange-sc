@@ -38,7 +38,7 @@
             },
             "expect": {
                 "out": [
-                    "0x45474c44"
+                    "0x4d4f4158"
                 ],
                 "status": "0",
                 "message": "",

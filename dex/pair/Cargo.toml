@@ -33,11 +33,11 @@ version = "0.10.1"
 default-features = false
 
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]
 
 [dev-dependencies]
 num-bigint = "0.4.2"
 
 [dev-dependencies.dharitri-sc-scenario]
-version = "=0.0.1"
+version = "=0.1.6"

@@ -1,5 +1,5 @@
-# WALLET_PEM="~/Elrond/MySandbox/testnet/wallets/users/alice.pem"
-WALLET_PEM="~/Documents/shared_folder/elrond_testnet_wallet.pem"
+# WALLET_PEM="~/Dharitri/MySandbox/testnet/wallets/users/alice.pem"
+WALLET_PEM="~/Documents/shared_folder/dharitri_testnet_wallet.pem"
 DEPLOY_TRANSACTION=$(erdpy data load --key=deployTransaction-devnet)
 DEPLOY_GAS="1000000000"
 PROXY="https://testnet-gateway.dharitri.com"
@@ -7,10 +7,10 @@ CHAIN_ID="T"
 # PROXY="http://localhost:7950"
 # CHAIN_ID="local-testnet"
 
-DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
-ROUTE_ADDRESS="moa1qqqqqqqqqqqqqpgq9s7ft5fj72zyt8qn8yd24xcl8rxu9v4m0n4sl83mkh"
-WMOAX_WRAP_ADDRESS="moa1qqqqqqqqqqqqqpgq4axqc749vuqr27snr8d8qgvlmz44chsr0n4skdm3kc"
-PAIR_ADDRESS="moa1qqqqqqqqqqqqqpgqr23zlc896w6qc2hw3evmmdmppw6jaucv0n4sp7rdtr"
+DCT_ISSUE_ADDRESS="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
+ROUTE_ADDRESS="erd1qqqqqqqqqqqqqpgq9s7ft5fj72zyt8qn8yd24xcl8rxu9v4m0n4sjlh528"
+WMOAX_WRAP_ADDRESS="erd1qqqqqqqqqqqqqpgq4axqc749vuqr27snr8d8qgvlmz44chsr0n4sm4a72g"
+PAIR_ADDRESS="erd1qqqqqqqqqqqqqpgqr23zlc896w6qc2hw3evmmdmppw6jaucv0n4svx9zhn"
 DEFAULT_GAS_LIMIT=50000000
 
 ##### ENDPOINTS #####
@@ -793,7 +793,7 @@ deployWMOAXContract() {
           --gas-limit=100000000 \
           --proxy=${PROXY} --chain=${CHAIN_ID} \
           --metadata-payable \
-          --bytecode="/home/elrond/Elrond/sc-bridge-elrond/moax-dct-swap/output/moax-dct-swap.wasm" \
+          --bytecode="/home/dharitri/Dharitri/sc-bridge-dharitri/moax-dct-swap/output/moax-dct-swap.wasm" \
           --outfile="deploy-wmoax-internal.interaction.json" --wait-result --send || return
     
     ADDRESS=$(erdpy data parse --file="deploy-wmoax-internal.interaction.json" --expression="data['contractAddress']")
@@ -811,7 +811,7 @@ issueWrappedMoax() {
         --gas-limit=${DEPLOY_GAS} \
         --value=5000000000000000000 \
         --function=issueWrappedMoax \
-        --arguments 0x5772617070656445474c44 0x574d4f4158 10000000 \
+        --arguments 0x577261707065644d4f4158 0x574d4f4158 10000000 \
         --send || return   
 }
 

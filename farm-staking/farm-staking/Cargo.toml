@@ -7,6 +7,7 @@ publish = false
 
 [lib]
 path = "src/lib.rs"
+
 [dependencies.farm]
 path = "../../dex/farm"
 
@@ -77,14 +78,14 @@ path = "../../common/common_structs"
 path = "../../common/common_errors"
 
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]
 
 [dependencies.dharitri-sc-modules]
-version = "=0.0.1"
+version = "=0.1.6"
 
 [dev-dependencies]
 num-bigint = "0.4.2"
 
 [dev-dependencies.dharitri-sc-scenario]
-version = "=0.0.1"
+version = "=0.1.6"

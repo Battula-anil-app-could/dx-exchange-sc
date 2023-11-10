@@ -8,10 +8,10 @@ publish = false
 [lib]
 path = "src/lib.rs"
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 
 [dependencies.dharitri-sc-modules]
-version = "=0.0.1"
+version = "=0.1.6"
 
 [dependencies.utils]
 path = "../../common/modules/utils"
@@ -43,4 +43,4 @@ num-traits = "0.2"
 hex = "0.4"
 
 [dev-dependencies.dharitri-sc-scenario]
-version = "=0.0.1"
+version = "=0.1.6"

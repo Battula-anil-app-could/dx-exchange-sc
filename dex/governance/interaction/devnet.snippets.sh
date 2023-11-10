@@ -1,9 +1,9 @@
-WALLET_PEM="/home/elrond/elrondsdk/erdpy-venv/lib/python3.8/site-packages/erdpy/testnet/wallets/users/mike.pem"
+WALLET_PEM="/home/dharitri/dharitrisdk/erdpy-venv/lib/python3.8/site-packages/erdpy/testnet/wallets/users/mike.pem"
 PROXY="https://devnet-gateway.dharitri.com"
 CHAIN_ID="D"
 
-GOVERNANCE_WASM_PATH="/home/elrond/Github/sc-dex-rs/dex/governance/output/governance.wasm"
-DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
+GOVERNANCE_WASM_PATH="/home/dharitri/Github/sc-dex-rs/dex/governance/output/governance.wasm"
+DCT_ISSUE_ADDRESS="erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"
 
 VOTE_NFT_NAME="0x564f5445"
 VOTE_NFT_TICKER="0x564f5445"
@@ -55,7 +55,7 @@ deployGovernanceSC() {
         --send || return
 }
 
-CONTRACT_ADDRESS="moa1qqqqqqqqqqqqqpgqcqm9vxzc3ghjgxfyd5dps6xhwpuhgsg6a4sqxgxyxr"
+CONTRACT_ADDRESS="erd1qqqqqqqqqqqqqpgqcqm9vxzc3ghjgxfyd5dps6xhwpuhgsg6a4sqtsqt6n"
 CONTRACT_ADDRESS_HEX="0x00000000000000000500c0365618588a2f2419246d1a1868d7707974411aed60"
 
 setSpecialRolesVoteNFT() {
@@ -64,7 +64,7 @@ setSpecialRolesVoteNFT() {
         --gas-limit=60000000 \
         --proxy=${PROXY} --chain=${CHAIN_ID} \
         --function="setSpecialRole" \
-        --arguments ${VOTE_NFT_ID} ${CONTRACT_ADDRESS_HEX} 0x45534454526f6c654e4654437265617465 0x45534454526f6c654e46544275726e \
+        --arguments ${VOTE_NFT_ID} ${CONTRACT_ADDRESS_HEX} 0x444354526f6c654e4654437265617465 0x444354526f6c654e46544275726e \
         --send || return
 }
 
@@ -141,7 +141,7 @@ execute() {
         --send || return
 }
 
-SELF_ADDR="moa1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sqh5mtjd"
+SELF_ADDR="erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa"
 
 redeem() {
     erdpy --verbose contract call ${SELF_ADDR} --recall-nonce \

@@ -1,7 +1,7 @@
 dharitri_sc::imports!();
 
 #[dharitri_sc::module]
-pub trait ScWhitelistModule {
+pub trait OtherScWhitelistModule {
     #[only_owner]
     #[endpoint(addPairToIntermediate)]
     fn add_pair_to_intermediate(&self, pair_address: ManagedAddress) {

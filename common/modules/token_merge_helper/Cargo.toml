@@ -10,5 +10,5 @@ path = "src/lib.rs"
 path = "../../common_errors"
 
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]

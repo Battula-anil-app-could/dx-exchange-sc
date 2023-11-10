@@ -8,11 +8,11 @@ publish = false
 [lib]
 path = "src/lib.rs"
 [dependencies.dharitri-sc]
-version = "=0.0.1"
+version = "=0.1.6"
 features = ["dct-token-payment-legacy-decode"]
 
 [dependencies.dharitri-sc-modules]
-version = "=0.0.1"
+version = "=0.1.6"
 
 [dependencies.common_structs]
 path = "../../common/common_structs"
@@ -23,4 +23,4 @@ num-traits = "0.2"
 hex = "0.4"
 
 [dev-dependencies.dharitri-sc-scenario]
-version = "=0.0.1"
+version = "=0.1.6"
