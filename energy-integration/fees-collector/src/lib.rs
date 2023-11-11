@@ -44,9 +44,6 @@ pub trait FeesCollector:
         self.energy_factory_address().set(&energy_factory_address);
     }
 
-    #[endpoint]
-    fn upgrade(&self) {}
-
     #[endpoint(claimRewards)]
     fn claim_rewards(
         &self,
@@ -56,16 +53,8 @@ pub trait FeesCollector:
 
         self.accumulate_additional_locked_tokens();
 
-        let original_caller = match opt_original_caller {
-            OptionalValue::Some(user) => {
-                require!(
-                    self.allow_external_claim_rewards(&user).get(),
-                    "Cannot claim rewards for this address"
-                );
-                user
-            }
-            OptionalValue::None => self.blockchain().get_caller(),
-        };
+        let caller = self.blockchain().get_caller();
+        let original_caller = self.get_orig_caller_from_opt(&caller, opt_original_caller);
 
         let wrapper = FeesCollectorWrapper::new();
         let mut rewards = self.claim_multi(&wrapper, &original_caller);
@@ -90,14 +79,14 @@ pub trait FeesCollector:
         }
 
         if !rewards.is_empty() {
-            self.send().direct_multi(&original_caller, &rewards);
+            self.send().direct_multi(&caller, &rewards);
         }
 
         if total_locked_token_rewards_amount > 0 {
             let locked_rewards = self.lock_virtual(
                 self.get_base_token_id(),
                 total_locked_token_rewards_amount,
-                original_caller.clone(),
+                caller,
                 original_caller,
             );
 

@@ -10,10 +10,7 @@
 // Total number of exported functions:  12
 
 #![no_std]
-
-// Configuration that works with rustc < 1.73.0.
-// TODO: Recommended rustc version: 1.73.0 or newer.
-#![feature(lang_items)]
+#![feature(alloc_error_handler, lang_items)]
 
 dharitri_sc_wasm_adapter::allocator!();
 dharitri_sc_wasm_adapter::panic_handler!();
@@ -21,18 +18,17 @@ dharitri_sc_wasm_adapter::panic_handler!();
 dharitri_sc_wasm_adapter::endpoints! {
     token_unstake
     (
-        init => init
-        getUnbondEpochs => unbond_epochs
-        getUnlockedTokensForUser => unlocked_tokens_for_user
-        claimUnlockedTokens => claim_unlocked_tokens
-        cancelUnbond => cancel_unbond
-        depositUserTokens => deposit_user_tokens
-        depositFees => deposit_fees
-        getFeesBurnPercentage => fees_burn_percentage
-        getFeesCollectorAddress => fees_collector_address
-        setEnergyFactoryAddress => set_energy_factory_address
-        getEnergyFactoryAddress => energy_factory_address
+        getUnbondEpochs
+        getUnlockedTokensForUser
+        claimUnlockedTokens
+        cancelUnbond
+        depositUserTokens
+        depositFees
+        getFeesBurnPercentage
+        getFeesCollectorAddress
+        setEnergyFactoryAddress
+        getEnergyFactoryAddress
     )
 }
 
-dharitri_sc_wasm_adapter::async_callback_empty! {}
+dharitri_sc_wasm_adapter::empty_callback! {}

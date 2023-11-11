@@ -9,7 +9,7 @@ use crate::base_impl_wrapper::FarmStakingWrapper;
 
 pub const MAX_PERCENT: u64 = 10_000;
 pub const BLOCKS_IN_YEAR: u64 = 31_536_000 / 6; // seconds_in_year / 6_seconds_per_block
-pub const MAX_MIN_UNBOND_EPOCHS: u64 = 30;
+const MAX_MIN_UNBOND_EPOCHS: u64 = 30;
 
 #[dharitri_sc::module]
 pub trait CustomRewardsModule:
@@ -17,7 +17,6 @@ pub trait CustomRewardsModule:
     + config::ConfigModule
     + token_send::TokenSendModule
     + farm_token::FarmTokenModule
-    + utils::UtilsModule
     + pausable::PausableModule
     + permissions_module::PermissionsModule
     + dharitri_sc_modules::default_issue_callbacks::DefaultIssueCallbacksModule

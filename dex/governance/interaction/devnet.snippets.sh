@@ -1,8 +1,8 @@
-WALLET_PEM="/home/dharitri/dharitrisdk/erdpy-venv/lib/python3.8/site-packages/erdpy/testnet/wallets/users/mike.pem"
+WALLET_PEM="/home/elrond/elrondsdk/erdpy-venv/lib/python3.8/site-packages/erdpy/testnet/wallets/users/mike.pem"
 PROXY="https://devnet-gateway.dharitri.com"
 CHAIN_ID="D"
 
-GOVERNANCE_WASM_PATH="/home/dharitri/Github/sc-dex-rs/dex/governance/output/governance.wasm"
+GOVERNANCE_WASM_PATH="/home/elrond/Github/sc-dex-rs/dex/governance/output/governance.wasm"
 DCT_ISSUE_ADDRESS="moa1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls29jpxv"
 
 VOTE_NFT_NAME="0x564f5445"

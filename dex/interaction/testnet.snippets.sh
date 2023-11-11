@@ -1,5 +1,5 @@
-# WALLET_PEM="~/Dharitri/MySandbox/testnet/wallets/users/alice.pem"
-WALLET_PEM="~/Documents/shared_folder/dharitri_testnet_wallet.pem"
+# WALLET_PEM="~/Elrond/MySandbox/testnet/wallets/users/alice.pem"
+WALLET_PEM="~/Documents/shared_folder/elrond_testnet_wallet.pem"
 DEPLOY_TRANSACTION=$(erdpy data load --key=deployTransaction-devnet)
 DEPLOY_GAS="1000000000"
 PROXY="https://testnet-gateway.dharitri.com"
@@ -793,7 +793,7 @@ deployWMOAXContract() {
           --gas-limit=100000000 \
           --proxy=${PROXY} --chain=${CHAIN_ID} \
           --metadata-payable \
-          --bytecode="/home/dharitri/Dharitri/sc-bridge-dharitri/moax-dct-swap/output/moax-dct-swap.wasm" \
+          --bytecode="/home/elrond/Elrond/sc-bridge-elrond/moax-dct-swap/output/moax-dct-swap.wasm" \
           --outfile="deploy-wmoax-internal.interaction.json" --wait-result --send || return
     
     ADDRESS=$(erdpy data parse --file="deploy-wmoax-internal.interaction.json" --expression="data['contractAddress']")

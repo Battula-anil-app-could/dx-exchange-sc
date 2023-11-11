@@ -10,10 +10,7 @@
 // Total number of exported functions:  23
 
 #![no_std]
-
-// Configuration that works with rustc < 1.73.0.
-// TODO: Recommended rustc version: 1.73.0 or newer.
-#![feature(lang_items)]
+#![feature(alloc_error_handler, lang_items)]
 
 dharitri_sc_wasm_adapter::allocator!();
 dharitri_sc_wasm_adapter::panic_handler!();
@@ -21,29 +18,28 @@ dharitri_sc_wasm_adapter::panic_handler!();
 dharitri_sc_wasm_adapter::endpoints! {
     governance
     (
-        init => init
-        propose => propose
-        upvote => upvote
-        downvote => downvote
-        execute => execute
-        redeem => redeem
-        changeQuorum => change_quorum
-        changeMinTokenBalanceForProposing => change_min_weight_for_proposal
-        changeVotingDelayInBlocks => change_voting_delay_in_blocks
-        changeVotingPeriodInBlocks => change_voting_period_in_blocks
-        changeGovernanceTokenIds => change_governance_token_ids
-        changePriceProviders => change_price_providers
-        getGovernanceTokenId => governance_token_ids
-        getQuorum => quorum
-        getMinWeightForProposal => min_weight_for_proposal
-        getVotingDelayInBlocks => voting_delay_in_blocks
-        getVotingPeriodInBlocks => voting_period_in_blocks
-        getProposal => proposal
-        getProposalIdCounter => proposal_id_counter
-        getVoteNFTId => vote_nft_id
-        getMexTokenId => mex_token_id
-        getProposalStatus => get_proposal_status_view
+        propose
+        upvote
+        downvote
+        execute
+        redeem
+        changeQuorum
+        changeMinTokenBalanceForProposing
+        changeVotingDelayInBlocks
+        changeVotingPeriodInBlocks
+        changeGovernanceTokenIds
+        changePriceProviders
+        getGovernanceTokenId
+        getQuorum
+        getMinWeightForProposal
+        getVotingDelayInBlocks
+        getVotingPeriodInBlocks
+        getProposal
+        getProposalIdCounter
+        getVoteNFTId
+        getMexTokenId
+        getProposalStatus
     )
 }
 
-dharitri_sc_wasm_adapter::async_callback_empty! {}
+dharitri_sc_wasm_adapter::empty_callback! {}

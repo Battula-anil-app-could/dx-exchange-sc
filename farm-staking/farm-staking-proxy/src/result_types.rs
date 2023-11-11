@@ -13,6 +13,7 @@ pub struct LpFarmClaimRewardsResult<M: ManagedTypeApi> {
 pub struct LpFarmExitResult<M: ManagedTypeApi> {
     pub lp_tokens: DctTokenPayment<M>,
     pub lp_farm_rewards: DctTokenPayment<M>,
+    pub remaining_farm_tokens: DctTokenPayment<M>,
 }
 
 // staking farm
@@ -30,6 +31,7 @@ pub struct StakingFarmClaimRewardsResult<M: ManagedTypeApi> {
 pub struct StakingFarmExitResult<M: ManagedTypeApi> {
     pub unbond_staking_farm_token: DctTokenPayment<M>,
     pub staking_rewards: DctTokenPayment<M>,
+    pub remaining_farm_tokens: DctTokenPayment<M>,
 }
 
 // pair
@@ -44,8 +46,7 @@ pub struct PairRemoveLiquidityResult<M: ManagedTypeApi> {
 #[derive(TypeAbi, TopEncode, TopDecode)]
 pub struct StakeProxyResult<M: ManagedTypeApi> {
     pub dual_yield_tokens: DctTokenPayment<M>,
-    pub staking_boosted_rewards: DctTokenPayment<M>,
-    pub lp_farm_boosted_rewards: DctTokenPayment<M>,
+    pub boosted_rewards: DctTokenPayment<M>,
 }
 
 impl<M: ManagedTypeApi> StakeProxyResult<M> {
@@ -55,8 +56,7 @@ impl<M: ManagedTypeApi> StakeProxyResult<M> {
         to: &ManagedAddress<M>,
     ) -> Self {
         sc.send_payment_non_zero(to, &self.dual_yield_tokens);
-        sc.send_payment_non_zero(to, &self.staking_boosted_rewards);
-        sc.send_payment_non_zero(to, &self.lp_farm_boosted_rewards);
+        sc.send_payment_non_zero(to, &self.boosted_rewards);
 
         self
     }
@@ -92,6 +92,8 @@ pub struct UnstakeResult<M: ManagedTypeApi> {
     pub lp_farm_rewards: DctTokenPayment<M>,
     pub staking_rewards: DctTokenPayment<M>,
     pub unbond_staking_farm_token: DctTokenPayment<M>,
+    pub opt_unbond_staking_farm_token_for_user_pos: Option<DctTokenPayment<M>>,
+    pub opt_new_dual_yield_tokens: Option<DctTokenPayment<M>>,
 }
 
 impl<M: ManagedTypeApi> UnstakeResult<M> {
@@ -105,6 +107,14 @@ impl<M: ManagedTypeApi> UnstakeResult<M> {
         payments.push(self.lp_farm_rewards.clone());
         payments.push(self.staking_rewards.clone());
         payments.push(self.unbond_staking_farm_token.clone());
+
+        if let Some(unbond_for_user_pos) = &self.opt_unbond_staking_farm_token_for_user_pos {
+            payments.push(unbond_for_user_pos.clone());
+        }
+
+        if let Some(new_dual_yield_tokens) = &self.opt_new_dual_yield_tokens {
+            payments.push(new_dual_yield_tokens.clone());
+        }
 
         sc.send_multiple_tokens_if_not_zero(to, &payments);
 

@@ -28,9 +28,6 @@ pub trait PauseAll:
     #[init]
     fn init(&self) {}
 
-    #[endpoint]
-    fn upgrade(&self) {}
-
     #[only_owner]
     #[endpoint(addPausableContracts)]
     fn add_pausable_contracts(&self, pausable_sc_addr: MultiValueEncoded<ManagedAddress>) {

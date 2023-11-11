@@ -8,14 +8,14 @@ publish = false
 [lib]
 path = "src/lib.rs"
 [dependencies.dharitri-sc]
-version = "=0.1.6"
+version = "=0.1.5"
 features = ["dct-token-payment-legacy-decode"]
 
 [dev-dependencies]
 num-bigint = "0.4.2"
 
 [dev-dependencies.dharitri-sc-scenario]
-version = "=0.1.6"
+version = "=0.1.5"
 
 [dev-dependencies.pair-mock]
 path = "../pair-mock"

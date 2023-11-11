@@ -22,8 +22,8 @@ path = "../../token_merge_helper"
 path = "../farm_token"
 
 [dependencies.dharitri-sc]
-version = "=0.1.6"
+version = "=0.1.5"
 features = ["dct-token-payment-legacy-decode"]
 
 [dependencies.dharitri-sc-modules]
-version = "=0.1.6"
+version = "=0.1.5"

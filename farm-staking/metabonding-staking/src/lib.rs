@@ -26,9 +26,6 @@ pub trait MetabondingStaking:
             .set_if_empty(&locked_asset_factory_address);
     }
 
-    #[endpoint]
-    fn upgrade(&self) {}
-
     #[payable("*")]
     #[endpoint(stakeLockedAsset)]
     fn stake_locked_asset(&self) {
@@ -77,7 +74,7 @@ pub trait MetabondingStaking:
         require!(!entry_mapper.is_empty(), "Must stake first");
 
         let mut user_entry: UserEntry<Self::Api> = entry_mapper.get();
-        let unstake_amount = user_entry.unstake_amount;
+        let unstake_amount = user_entry.unstake_amount.clone();
         require!(unstake_amount > 0, "Must unstake first");
 
         let current_epoch = self.blockchain().get_block_epoch();

@@ -57,7 +57,7 @@ fn farm_proxy_actions_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr), OptionalValue::None);
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr));
             },
         )
         .assert_ok();
@@ -122,7 +122,7 @@ fn farm_proxy_actions_test() {
             1,
             &rust_biguint!(USER_BALANCE / 2),
             |sc| {
-                sc.claim_rewards_proxy(managed_address!(&farm_addr), OptionalValue::None);
+                sc.claim_rewards_proxy(managed_address!(&farm_addr));
             },
         )
         .assert_ok();
@@ -240,7 +240,8 @@ fn farm_proxy_actions_test() {
             3,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                let output = sc.exit_farm_proxy(managed_address!(&farm_addr), OptionalValue::None);
+                let output = sc
+                    .exit_farm_proxy(managed_address!(&farm_addr), managed_biguint!(USER_BALANCE));
                 let output_lp_token = output.0 .0;
                 assert_eq!(output_lp_token.token_nonce, 1);
                 assert_eq!(output_lp_token.amount, USER_BALANCE);
@@ -375,10 +376,7 @@ fn farm_with_wrapped_lp_test() {
             1,
             &expected_lp_token_amount,
             |sc| {
-                sc.enter_farm_proxy_endpoint(
-                    managed_address!(&farm_locked_addr),
-                    OptionalValue::None,
-                );
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_locked_addr));
             },
         )
         .assert_ok();
@@ -444,9 +442,12 @@ fn farm_with_wrapped_lp_test() {
             &setup.proxy_wrapper,
             WRAPPED_FARM_TOKEN_ID,
             1,
-            &(expected_lp_token_amount.clone() / rust_biguint!(2)),
+            &expected_lp_token_amount,
             |sc| {
-                sc.exit_farm_proxy(managed_address!(&farm_locked_addr), OptionalValue::None);
+                sc.exit_farm_proxy(
+                    managed_address!(&farm_locked_addr),
+                    managed_biguint!(expected_lp_token_amount.to_u64().unwrap() / 2),
+                );
             },
         )
         .assert_ok();
@@ -548,10 +549,7 @@ fn farm_proxy_claim_energy_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(
-                    managed_address!(&farm_locked_addr),
-                    OptionalValue::None,
-                );
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_locked_addr));
             },
         )
         .assert_ok();
@@ -625,7 +623,7 @@ fn farm_proxy_claim_energy_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.claim_rewards_proxy(managed_address!(&farm_locked_addr), OptionalValue::None);
+                sc.claim_rewards_proxy(managed_address!(&farm_locked_addr));
             },
         )
         .assert_ok();
@@ -686,10 +684,7 @@ fn farm_proxy_partial_exit_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(
-                    managed_address!(&farm_locked_addr),
-                    OptionalValue::None,
-                );
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_locked_addr));
             },
         )
         .assert_ok();
@@ -763,9 +758,12 @@ fn farm_proxy_partial_exit_test() {
             &setup.proxy_wrapper,
             WRAPPED_FARM_TOKEN_ID,
             1,
-            &rust_biguint!(USER_BALANCE / 2),
+            &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.exit_farm_proxy(managed_address!(&farm_locked_addr), OptionalValue::None);
+                sc.exit_farm_proxy(
+                    managed_address!(&farm_locked_addr),
+                    managed_biguint!(USER_BALANCE / 2),
+                );
             },
         )
         .assert_ok();
@@ -864,10 +862,7 @@ fn farm_proxy_partial_exit_with_penalty_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(
-                    managed_address!(&farm_locked_addr),
-                    OptionalValue::None,
-                );
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_locked_addr));
             },
         )
         .assert_ok();
@@ -941,9 +936,12 @@ fn farm_proxy_partial_exit_with_penalty_test() {
             &setup.proxy_wrapper,
             WRAPPED_FARM_TOKEN_ID,
             1,
-            &rust_biguint!(USER_BALANCE / 2),
+            &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.exit_farm_proxy(managed_address!(&farm_locked_addr), OptionalValue::None);
+                sc.exit_farm_proxy(
+                    managed_address!(&farm_locked_addr),
+                    managed_biguint!(USER_BALANCE / 2),
+                );
             },
         )
         .assert_ok();
@@ -1054,7 +1052,7 @@ fn different_farm_locked_token_nonce_merging_test() {
             1,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr), OptionalValue::None);
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr));
             },
         )
         .assert_ok();
@@ -1068,7 +1066,7 @@ fn different_farm_locked_token_nonce_merging_test() {
             2,
             &rust_biguint!(USER_BALANCE),
             |sc| {
-                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr), OptionalValue::None);
+                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr));
             },
         )
         .assert_ok();
@@ -1161,7 +1159,10 @@ fn different_farm_locked_token_nonce_merging_test() {
             3,
             &rust_biguint!(USER_BALANCE * 2),
             |sc| {
-                sc.exit_farm_proxy(managed_address!(&farm_addr), OptionalValue::None);
+                sc.exit_farm_proxy(
+                    managed_address!(&farm_addr),
+                    managed_biguint!(USER_BALANCE * 2),
+                );
             },
         )
         .assert_ok();
@@ -1176,246 +1177,6 @@ fn different_farm_locked_token_nonce_merging_test() {
             original_token_id: managed_token_id_wrapped!(MEX_TOKEN_ID),
             original_token_nonce: 0,
             unlock_epoch: expected_unlock_epoch,
-        }),
-    );
-}
-
-#[test]
-fn increase_proxy_farm_lkmex_energy() {
-    let mut setup = ProxySetup::new(
-        proxy_dex::contract_obj,
-        pair::contract_obj,
-        farm_with_locked_rewards::contract_obj,
-        energy_factory::contract_obj,
-    );
-    let first_user = setup.first_user.clone();
-    let farm_addr = setup.farm_locked_wrapper.address_ref().clone();
-
-    //////////////////////////////////////////// ENTER FARM /////////////////////////////////////
-
-    setup
-        .b_mock
-        .execute_dct_transfer(
-            &first_user,
-            &setup.proxy_wrapper,
-            LOCKED_TOKEN_ID,
-            1,
-            &rust_biguint!(USER_BALANCE),
-            |sc| {
-                sc.enter_farm_proxy_endpoint(managed_address!(&farm_addr), OptionalValue::None);
-            },
-        )
-        .assert_ok();
-
-    let block_epoch = 1;
-
-    // check user energy before
-    setup
-        .b_mock
-        .execute_query(&setup.simple_lock_wrapper, |sc| {
-            let lock_epochs = LOCK_OPTIONS[0] - block_epoch;
-            let expected_energy_amount =
-                BigInt::from((USER_BALANCE) as i64) * BigInt::from(lock_epochs as i64);
-            let expected_energy = Energy::new(
-                expected_energy_amount,
-                block_epoch,
-                managed_biguint!(USER_BALANCE),
-            );
-            let actual_energy = sc.user_energy(&managed_address!(&first_user)).get();
-            assert_eq!(expected_energy, actual_energy);
-        })
-        .assert_ok();
-
-    //////////////////////////////////////////// INCREASE ENERGY /////////////////////////////////////
-    setup
-        .b_mock
-        .execute_dct_transfer(
-            &first_user,
-            &setup.proxy_wrapper,
-            WRAPPED_FARM_TOKEN_ID,
-            1,
-            &rust_biguint!(USER_BALANCE),
-            |sc| {
-                sc.increase_proxy_farm_token_energy_endpoint(LOCK_OPTIONS[1]);
-            },
-        )
-        .assert_ok();
-
-    // check user energy after
-    setup
-        .b_mock
-        .execute_query(&setup.simple_lock_wrapper, |sc| {
-            let lock_epochs = LOCK_OPTIONS[1] - block_epoch;
-            let expected_energy_amount =
-                BigInt::from((USER_BALANCE) as i64) * BigInt::from(lock_epochs as i64);
-            let expected_energy = Energy::new(
-                expected_energy_amount,
-                block_epoch,
-                managed_biguint!(USER_BALANCE),
-            );
-            let actual_energy = sc.user_energy(&managed_address!(&first_user)).get();
-            assert_eq!(expected_energy, actual_energy);
-        })
-        .assert_ok();
-}
-
-#[test]
-fn increase_proxy_farm_proxy_lp_energy() {
-    let mut setup = ProxySetup::new(
-        proxy_dex::contract_obj,
-        pair::contract_obj,
-        farm_with_locked_rewards::contract_obj,
-        energy_factory::contract_obj,
-    );
-
-    setup
-        .b_mock
-        .execute_tx(
-            &setup.owner,
-            &setup.farm_locked_wrapper,
-            &rust_biguint!(0),
-            |sc| {
-                sc.farming_token_id().set(&managed_token_id!(LP_TOKEN_ID));
-
-                // set produce rewards to false for easier calculation
-                sc.produce_rewards_enabled().set(false);
-            },
-        )
-        .assert_ok();
-
-    setup.b_mock.set_dct_local_roles(
-        setup.farm_locked_wrapper.address_ref(),
-        LP_TOKEN_ID,
-        &[DctLocalRole::Burn],
-    );
-
-    let first_user = setup.first_user.clone();
-    let locked_token_amount = rust_biguint!(1_000_000_000);
-    let other_token_amount = rust_biguint!(500_000_000);
-    let expected_lp_token_amount = rust_biguint!(499_999_000);
-
-    // set the price to 1 MOAX = 2 MEX
-    let payments = vec![
-        TxTokenTransfer {
-            token_identifier: LOCKED_TOKEN_ID.to_vec(),
-            nonce: 1,
-            value: locked_token_amount.clone(),
-        },
-        TxTokenTransfer {
-            token_identifier: WMOAX_TOKEN_ID.to_vec(),
-            nonce: 0,
-            value: other_token_amount.clone(),
-        },
-    ];
-
-    // add liquidity
-    let pair_addr = setup.pair_wrapper.address_ref().clone();
-    setup
-        .b_mock
-        .execute_dct_multi_transfer(&first_user, &setup.proxy_wrapper, &payments, |sc| {
-            sc.add_liquidity_proxy(
-                managed_address!(&pair_addr),
-                managed_biguint!(locked_token_amount.to_u64().unwrap()),
-                managed_biguint!(other_token_amount.to_u64().unwrap()),
-            );
-        })
-        .assert_ok();
-
-    let block_epoch = 1u64;
-    let user_balance = USER_BALANCE;
-
-    // check energy before
-    setup
-        .b_mock
-        .execute_query(&setup.simple_lock_wrapper, |sc| {
-            let unlock_epoch = LOCK_OPTIONS[0];
-            let lock_epochs = unlock_epoch - block_epoch;
-            let expected_energy_amount =
-                BigInt::from((user_balance) as i64) * BigInt::from(lock_epochs as i64);
-            let expected_energy = Energy::new(
-                expected_energy_amount,
-                block_epoch,
-                managed_biguint!(user_balance),
-            );
-            let actual_energy = sc.user_energy(&managed_address!(&first_user)).get();
-            assert_eq!(expected_energy, actual_energy);
-        })
-        .assert_ok();
-
-    let farm_locked_addr = setup.farm_locked_wrapper.address_ref().clone();
-
-    //////////////////////////////////////////// ENTER FARM /////////////////////////////////////
-
-    setup
-        .b_mock
-        .execute_dct_transfer(
-            &first_user,
-            &setup.proxy_wrapper,
-            WRAPPED_LP_TOKEN_ID,
-            1,
-            &expected_lp_token_amount,
-            |sc| {
-                sc.enter_farm_proxy_endpoint(
-                    managed_address!(&farm_locked_addr),
-                    OptionalValue::None,
-                );
-            },
-        )
-        .assert_ok();
-
-    //////////////////////////////////////////// INCREASE ENERGY /////////////////////////////////////
-    setup
-        .b_mock
-        .execute_dct_transfer(
-            &first_user,
-            &setup.proxy_wrapper,
-            WRAPPED_FARM_TOKEN_ID,
-            1,
-            &expected_lp_token_amount,
-            |sc| {
-                sc.increase_proxy_farm_token_energy_endpoint(LOCK_OPTIONS[1]);
-            },
-        )
-        .assert_ok();
-
-    // check energy after
-    let user_locked_tokens_in_lp = locked_token_amount.to_u64().unwrap();
-    setup
-        .b_mock
-        .execute_query(&setup.simple_lock_wrapper, |sc| {
-            let first_lock_epochs = LOCK_OPTIONS[1] - block_epoch;
-            let second_lock_epochs = LOCK_OPTIONS[0] - block_epoch;
-            let expected_energy_amount = BigInt::from((user_locked_tokens_in_lp) as i64)
-                * BigInt::from(first_lock_epochs as i64)
-                + BigInt::from((USER_BALANCE - user_locked_tokens_in_lp) as i64)
-                    * BigInt::from(second_lock_epochs as i64);
-            let expected_energy = Energy::new(
-                expected_energy_amount,
-                block_epoch,
-                managed_biguint!(USER_BALANCE),
-            );
-            let actual_energy = sc.user_energy(&managed_address!(&first_user)).get();
-            assert_eq!(expected_energy, actual_energy);
-        })
-        .assert_ok();
-
-    // check user token after increase energy
-    setup.b_mock.check_nft_balance(
-        &first_user,
-        WRAPPED_FARM_TOKEN_ID,
-        2,
-        &expected_lp_token_amount,
-        Some(&WrappedFarmTokenAttributes::<DebugApi> {
-            proxy_farming_token: DctTokenPayment {
-                token_identifier: managed_token_id!(WRAPPED_LP_TOKEN_ID),
-                token_nonce: 2,
-                amount: managed_biguint!(expected_lp_token_amount.to_u64().unwrap()),
-            },
-            farm_token: DctTokenPayment {
-                token_identifier: managed_token_id!(FARM_LOCKED_TOKEN_ID),
-                token_nonce: 1,
-                amount: managed_biguint!(expected_lp_token_amount.to_u64().unwrap()),
-            },
         }),
     );
 }

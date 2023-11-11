@@ -10,10 +10,7 @@
 // Total number of exported functions:  10
 
 #![no_std]
-
-// Configuration that works with rustc < 1.73.0.
-// TODO: Recommended rustc version: 1.73.0 or newer.
-#![feature(lang_items)]
+#![feature(alloc_error_handler, lang_items)]
 
 dharitri_sc_wasm_adapter::allocator!();
 dharitri_sc_wasm_adapter::panic_handler!();
@@ -21,16 +18,14 @@ dharitri_sc_wasm_adapter::panic_handler!();
 dharitri_sc_wasm_adapter::endpoints! {
     locked_token_wrapper
     (
-        init => init
-        wrapLockedToken => wrap_locked_token_endpoint
-        unwrapLockedToken => unwrap_locked_token_endpoint
-        issueWrappedToken => issue_wrapped_token
-        setTransferRoleWrappedToken => set_transfer_role
-        unsetTransferRoleWrappedToken => unset_transfer_role
-        getWrappedTokenId => wrapped_token
-        setEnergyFactoryAddress => set_energy_factory_address
-        getEnergyFactoryAddress => energy_factory_address
+        wrapLockedToken
+        unwrapLockedToken
+        issueWrappedToken
+        setTransferRoleWrappedToken
+        unsetTransferRoleWrappedToken
+        getWrappedTokenId
+        setEnergyFactoryAddress
+        getEnergyFactoryAddress
+        callBack
     )
 }
-
-dharitri_sc_wasm_adapter::async_callback! { locked_token_wrapper }

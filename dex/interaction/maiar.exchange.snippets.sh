@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WALLET_PEM="~/Documents/shared_folder/dharitri_testnet_wallet.pem"
+WALLET_PEM="~/Documents/shared_folder/elrond_testnet_wallet.pem"
 PROXY="https://testnet-gateway.dharitri.com"
 CHAIN_ID="T"
 ROUTE_ADDRESS="moa1qqqqqqqqqqqqqpgqnqf6qpnd7y3m6wpkur9u8hg37rvhn5ae0n4s5xepd4"

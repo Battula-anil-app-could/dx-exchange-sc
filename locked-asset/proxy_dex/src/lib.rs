@@ -13,7 +13,7 @@ pub mod pair_interactions;
 pub mod proxy_common;
 pub mod proxy_farm;
 pub mod proxy_pair;
-pub mod other_sc_whitelist;
+pub mod sc_whitelist;
 pub mod wrapped_farm_attributes;
 pub mod wrapped_farm_token_merge;
 pub mod wrapped_lp_attributes;
@@ -22,7 +22,7 @@ pub mod wrapped_lp_token_merge;
 #[dharitri_sc::contract]
 pub trait ProxyDexImpl:
     proxy_common::ProxyCommonModule
-    + crate::other_sc_whitelist::OtherScWhitelistModule
+    + sc_whitelist::ScWhitelistModule
     + proxy_pair::ProxyPairModule
     + pair_interactions::PairInteractionsModule
     + proxy_farm::ProxyFarmModule
@@ -37,7 +37,6 @@ pub trait ProxyDexImpl:
     + dharitri_sc_modules::default_issue_callbacks::DefaultIssueCallbacksModule
     + utils::UtilsModule
     + legacy_token_decode_module::LegacyTokenDecodeModule
-    + sc_whitelist_module::SCWhitelistModule
 {
     #[init]
     fn init(
@@ -57,9 +56,6 @@ pub trait ProxyDexImpl:
         self.energy_factory_address()
             .set_if_empty(&energy_factory_address);
     }
-
-    #[endpoint]
-    fn upgrade(&self) {}
 
     #[only_owner]
     #[payable("MOAX")]

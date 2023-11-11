@@ -6,20 +6,19 @@ dharitri_sc::imports!();
 dharitri_sc::derive_imports!();
 
 use crate::wrapped_lp_attributes::{WrappedLpToken, WrappedLpTokenAttributes};
-use common_structs::Epoch;
 use fixed_supply_token::FixedSupplyToken;
 
 #[dharitri_sc::module]
 pub trait ProxyPairModule:
     crate::proxy_common::ProxyCommonModule
-    + crate::other_sc_whitelist::OtherScWhitelistModule
+    + crate::sc_whitelist::ScWhitelistModule
     + crate::pair_interactions::PairInteractionsModule
     + crate::wrapped_lp_token_merge::WrappedLpTokenMerge
     + crate::energy_update::EnergyUpdateModule
-    + crate::events::EventsModule
     + energy_query::EnergyQueryModule
     + token_merge_helper::TokenMergeHelperModule
     + token_send::TokenSendModule
+    + crate::events::EventsModule
     + utils::UtilsModule
     + legacy_token_decode_module::LegacyTokenDecodeModule
 {
@@ -220,59 +219,6 @@ pub trait ProxyPairModule:
         );
 
         output_payments.into()
-    }
-
-    #[payable("*")]
-    #[endpoint(increaseProxyPairTokenEnergy)]
-    fn increase_proxy_pair_token_energy_endpoint(&self, lock_epochs: Epoch) -> DctTokenPayment {
-        self.require_wrapped_lp_token_id_not_empty();
-
-        let payment = self.call_value().single_dct();
-        let wrapped_lp_mapper = self.wrapped_lp_token();
-        wrapped_lp_mapper.require_same_token(&payment.token_identifier);
-
-        let caller = self.blockchain().get_caller();
-        let old_attributes: WrappedLpTokenAttributes<Self::Api> =
-            self.get_attributes_as_part_of_fixed_supply(&payment, &wrapped_lp_mapper);
-
-        let new_locked_tokens =
-            self.increase_proxy_pair_token_energy(caller.clone(), lock_epochs, &old_attributes);
-        let new_token_attributes = WrappedLpTokenAttributes {
-            locked_tokens: new_locked_tokens,
-            lp_token_id: old_attributes.lp_token_id,
-            lp_token_amount: old_attributes.lp_token_amount,
-        };
-
-        self.send().dct_local_burn(
-            &payment.token_identifier,
-            payment.token_nonce,
-            &payment.amount,
-        );
-
-        let new_token_amount = new_token_attributes.get_total_supply();
-
-        wrapped_lp_mapper.nft_create_and_send(&caller, new_token_amount, &new_token_attributes)
-    }
-
-    fn increase_proxy_pair_token_energy(
-        &self,
-        user: ManagedAddress,
-        lock_epochs: Epoch,
-        old_attributes: &WrappedLpTokenAttributes<Self::Api>,
-    ) -> DctTokenPayment {
-        let new_locked_token_id = self.get_locked_token_id();
-        require!(
-            old_attributes.locked_tokens.token_identifier == new_locked_token_id,
-            "Invalid payment"
-        );
-
-        let energy_factory_addr = self.energy_factory_address().get();
-        self.call_increase_energy(
-            user,
-            old_attributes.locked_tokens.clone(),
-            lock_epochs,
-            energy_factory_addr,
-        )
     }
 
     fn require_wrapped_lp_token_id_not_empty(&self) {

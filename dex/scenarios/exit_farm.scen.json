@@ -25,7 +25,9 @@
                     }
                 ],
                 "function": "exitFarm",
-                "arguments": [],
+                "arguments": [
+                    "100,000"
+                ],
                 "gasLimit": "100,000,000",
                 "gasPrice": "0"
             },
@@ -39,6 +41,11 @@
                     {
                         "1-token_id": "nested:str:WMOAX-abcdef",
                         "2-nonce": "u64:0",
+                        "3-amount": "biguint:0"
+                    },
+                    {
+                        "1-token_id": "nested:str:FARM-abcdef",
+                        "2-nonce": "u64:2",
                         "3-amount": "biguint:0"
                     }
                 ],

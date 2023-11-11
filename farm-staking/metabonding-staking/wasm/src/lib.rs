@@ -10,10 +10,7 @@
 // Total number of exported functions:  12
 
 #![no_std]
-
-// Configuration that works with rustc < 1.73.0.
-// TODO: Recommended rustc version: 1.73.0 or newer.
-#![feature(lang_items)]
+#![feature(alloc_error_handler, lang_items)]
 
 dharitri_sc_wasm_adapter::allocator!();
 dharitri_sc_wasm_adapter::panic_handler!();
@@ -21,18 +18,17 @@ dharitri_sc_wasm_adapter::panic_handler!();
 dharitri_sc_wasm_adapter::endpoints! {
     metabonding_staking
     (
-        init => init
-        stakeLockedAsset => stake_locked_asset
-        unstake => unstake
-        unbond => unbond
-        getStakedAmountForUser => get_staked_amount_for_user
-        getUserEntry => get_user_entry
-        getSnapshot => get_snapshot
-        getLockedAssetTokenId => locked_asset_token_id
-        getLockedAssetFactoryAddress => locked_asset_factory_address
-        getTotalLockedAssetSupply => total_locked_asset_supply
-        getUserList => user_list
+        stakeLockedAsset
+        unstake
+        unbond
+        getStakedAmountForUser
+        getUserEntry
+        getSnapshot
+        getLockedAssetTokenId
+        getLockedAssetFactoryAddress
+        getTotalLockedAssetSupply
+        getUserList
     )
 }
 
-dharitri_sc_wasm_adapter::async_callback_empty! {}
+dharitri_sc_wasm_adapter::empty_callback! {}

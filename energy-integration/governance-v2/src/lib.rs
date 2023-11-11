@@ -2,6 +2,7 @@
 
 dharitri_sc::imports!();
 
+pub mod caller_check;
 pub mod configurable;
 mod errors;
 pub mod events;
@@ -14,9 +15,11 @@ use proposal_storage::VoteType;
 use weekly_rewards_splitting::events::Week;
 use weekly_rewards_splitting::global_info::ProxyTrait as _;
 
-use crate::configurable::{FULL_PERCENTAGE, MAX_GAS_LIMIT_PER_BLOCK};
 use crate::errors::*;
 use crate::proposal_storage::ProposalVotes;
+
+const MAX_GAS_LIMIT_PER_BLOCK: u64 = 600_000_000;
+const FULL_PERCENTAGE: u64 = 10_000;
 
 /// An empty contract. To be used as a template when starting a new contract from scratch.
 #[dharitri_sc::contract]
@@ -24,6 +27,7 @@ pub trait GovernanceV2:
     configurable::ConfigurablePropertiesModule
     + events::EventsModule
     + proposal_storage::ProposalStorageModule
+    + caller_check::CallerCheckModule
     + views::ViewsModule
     + energy_query::EnergyQueryModule
     + permissions_module::PermissionsModule
@@ -61,15 +65,13 @@ pub trait GovernanceV2:
         self.try_change_fee_token_id(fee_token);
     }
 
-    #[endpoint]
-    fn upgrade(&self) {}
-
     /// Propose a list of actions.
     /// A maximum of MAX_GOVERNANCE_PROPOSAL_ACTIONS can be proposed at a time.
     ///
     /// The proposer's energy is NOT automatically used for voting. A separate vote is needed.
     ///
     /// Returns the ID of the newly created proposal.
+    #[only_owner]
     #[payable("*")]
     #[endpoint]
     fn propose(
@@ -77,17 +79,14 @@ pub trait GovernanceV2:
         description: ManagedBuffer,
         actions: MultiValueEncoded<GovernanceActionAsMultiArg<Self::Api>>,
     ) -> ProposalId {
-        let proposer = self.blockchain().get_caller();
-        require!(
-            !self.blockchain().is_smart_contract(&proposer),
-            PROPOSAL_NOT_ALLOWED_FOR_SC
-        );
+        self.require_caller_not_self();
 
         require!(
             actions.len() <= MAX_GOVERNANCE_PROPOSAL_ACTIONS,
             EXEEDED_MAX_ACTIONS
         );
 
+        let proposer = self.blockchain().get_caller();
         let user_energy = self.get_energy_amount_non_zero(&proposer);
         let min_energy_for_propose = self.min_energy_for_propose().get();
         require!(user_energy >= min_energy_for_propose, NOT_ENOUGH_ENERGY);
@@ -138,7 +137,6 @@ pub trait GovernanceV2:
             withdraw_percentage_defeated,
             total_quorum: BigUint::zero(),
             proposal_start_block: current_block,
-            fee_withdrawn: false,
         };
         let proposal_id = self.proposals().push(&proposal);
 
@@ -152,6 +150,7 @@ pub trait GovernanceV2:
     /// Vote on a proposal. The voting power depends on the user's energy.
     #[endpoint]
     fn vote(&self, proposal_id: ProposalId, vote: VoteType) {
+        self.require_caller_not_self();
         self.require_valid_proposal_id(proposal_id);
         require!(
             self.get_proposal_status(proposal_id) == GovernanceProposalStatus::Active,
@@ -217,9 +216,13 @@ pub trait GovernanceV2:
         }
     }
 
-    /// Cancel a proposed action. This can be done only during Pending status
+    /// Cancel a proposed action. This can be done:
+    /// - by the proposer, at any time
+    /// - by anyone, if the proposal was defeated
     #[endpoint]
     fn cancel(&self, proposal_id: ProposalId) {
+        self.require_caller_not_self();
+
         match self.get_proposal_status(proposal_id) {
             GovernanceProposalStatus::None => {
                 sc_panic!(NO_PROPOSAL);
@@ -229,7 +232,7 @@ pub trait GovernanceV2:
                 let caller = self.blockchain().get_caller();
 
                 require!(caller == proposal.proposer, ONLY_PROPOSER_CANCEL);
-                self.refund_proposal_fee(&proposal, &proposal.fee_payment.amount);
+                self.refund_proposal_fee(proposal_id, &proposal.fee_payment.amount);
                 self.clear_proposal(proposal_id);
                 self.proposal_canceled_event(proposal_id);
             }
@@ -240,9 +243,10 @@ pub trait GovernanceV2:
     }
 
     /// When a proposal was defeated, the proposer can withdraw
-    /// If DefeatedWithVeto only part of the fee  can be withdrawn
+    /// a part of the FEE.
     #[endpoint(withdrawDeposit)]
     fn withdraw_deposit(&self, proposal_id: ProposalId) {
+        self.require_caller_not_self();
         let caller = self.blockchain().get_caller();
 
         match self.get_proposal_status(proposal_id) {
@@ -250,36 +254,30 @@ pub trait GovernanceV2:
                 sc_panic!(NO_PROPOSAL);
             }
             GovernanceProposalStatus::Succeeded | GovernanceProposalStatus::Defeated => {
-                let mut proposal = self.proposals().get(proposal_id);
+                let proposal = self.proposals().get(proposal_id);
 
                 require!(caller == proposal.proposer, ONLY_PROPOSER_WITHDRAW);
-                require!(!proposal.fee_withdrawn, FEE_ALREADY_WITHDRAWN);
 
-                self.refund_proposal_fee(&proposal, &proposal.fee_payment.amount);
-                proposal.fee_withdrawn = true;
-                self.proposals().set(proposal_id, &proposal);
+                self.refund_proposal_fee(proposal_id, &proposal.fee_payment.amount);
             }
             GovernanceProposalStatus::DefeatedWithVeto => {
-                let mut proposal = self.proposals().get(proposal_id);
-
-                require!(!proposal.fee_withdrawn, FEE_ALREADY_WITHDRAWN);
-
+                let proposal = self.proposals().get(proposal_id);
                 let refund_percentage = BigUint::from(proposal.withdraw_percentage_defeated);
                 let refund_amount =
                     refund_percentage * proposal.fee_payment.amount.clone() / FULL_PERCENTAGE;
 
-                // Burn remaining fees
-                let remaining_fee = proposal.fee_payment.amount.clone() - refund_amount.clone();
-                self.send().dct_non_zero_local_burn(
-                    &proposal.fee_payment.token_identifier,
-                    proposal.fee_payment.token_nonce,
-                    &remaining_fee,
-                );
+                require!(caller == proposal.proposer, ONLY_PROPOSER_WITHDRAW);
 
-                // Mark this proposal that fee is withdrawn
-                self.refund_proposal_fee(&proposal, &refund_amount);
-                proposal.fee_withdrawn = true;
-                self.proposals().set(proposal_id, &proposal);
+                self.refund_proposal_fee(proposal_id, &refund_amount);
+                let remaining_fee = proposal.fee_payment.amount - refund_amount;
+
+                self.proposal_remaining_fees().update(|fees| {
+                    fees.push(DctTokenPayment::new(
+                        proposal.fee_payment.token_identifier,
+                        proposal.fee_payment.token_nonce,
+                        remaining_fee,
+                    ));
+                });
             }
             _ => {
                 sc_panic!(WITHDRAW_NOT_ALLOWED);
@@ -300,18 +298,19 @@ pub trait GovernanceV2:
         total
     }
 
-    fn refund_proposal_fee(
-        &self,
-        proposal: &GovernanceProposal<Self::Api>,
-        refund_amount: &BigUint,
-    ) {
-        self.send().direct_non_zero_dct_payment(
+    fn refund_proposal_fee(&self, proposal_id: ProposalId, refund_amount: &BigUint) {
+        let proposal: GovernanceProposal<<Self as ContractBase>::Api> =
+            self.proposals().get(proposal_id);
+
+        self.send().direct_dct(
             &proposal.proposer,
-            &DctTokenPayment::new(
-                proposal.fee_payment.token_identifier.clone(),
-                proposal.fee_payment.token_nonce,
-                refund_amount.clone(),
-            ),
+            &proposal.fee_payment.token_identifier,
+            proposal.fee_payment.token_nonce,
+            refund_amount,
         );
     }
+
+    #[storage_mapper("proposalRemainingFees")]
+    fn proposal_remaining_fees(&self)
+        -> SingleValueMapper<ManagedVec<DctTokenPayment<Self::Api>>>;
 }

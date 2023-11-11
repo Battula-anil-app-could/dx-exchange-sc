@@ -39,7 +39,7 @@ pub trait BaseExitFarmModule:
         self.validate_contract_state(storage_cache.contract_state, &storage_cache.farm_token_id);
 
         let exit_farm_context = ExitFarmContext::<Self::Api, FC::AttributesType>::new(
-            payment.clone(),
+            payment,
             &storage_cache.farm_token_id,
             self.blockchain(),
         );
@@ -61,8 +61,6 @@ pub trait BaseExitFarmModule:
             &storage_cache,
         );
         storage_cache.reward_reserve -= &reward;
-
-        FC::decrease_user_farm_position(self, &payment);
 
         let farming_token_amount = token_attributes.get_total_supply();
         let farming_token_payment = DctTokenPayment::new(

@@ -25,9 +25,6 @@ pub trait SimpleLock:
     #[init]
     fn init(&self) {}
 
-    #[endpoint]
-    fn upgrade(&self) {}
-
     /// Locks any token (including MOAX) until `unlock_epoch` and receive meta DCT LOCKED tokens.
     /// on a 1:1 ratio. If unlock epoch has already passed, the original tokens are sent instead.
     ///
